@@ -106,10 +106,12 @@ module CI
       end
 
       def fault(fault)
-        tc = @current_suite.testcases.last
+        tc = @current_suite.testcases.last        
         f = Failure.new(fault)
-        tc.failures << f 
-        tc.skipped=true if f.skipped? 
+        if f.error? || f.failure?
+          tc.failures << f 
+        end
+        tc.skipped=true if f.skipped?
       end
 
       def finished(elapsed_time)
